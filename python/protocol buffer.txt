@@ -1,0 +1,22 @@
+要使用之前先到code.google.com上搜索protocol buffer，下载到本地，解压后依次执行：
+./configuremakemake checkmake install
+最后一步涉及到权限，可能会需要sudo。
+二、定义一个proto文件
+下面依然是给出一个简单的例子，要使用proto首先需要自己定义一个proto文件，定义一个people.proto文件，内容如下：
+message people{
+optional string name = 1;
+optional int32 height = 2;}三、生成一个python可用的py文件
+然后就是生成对应的py文件，命令如下：
+protoc -I=./ --python_out=./ people.proto
+其中-I是source的路径，--python_out表示对应python库的生成路径，然后是对应的proto文件。当然，pb还支持c++和java，修改--python_out即可。
+完成后就有对应的people_pb2.py文件了。导入后即可使用，第一次安装后直接用应该会提示：ImportError: No module named google.protobuf，这是因为找不到对应的库路径导致，到你下载的pb路径下，找到python路径，执行sudo python setup.py install，执行完后可以通过执行sudo python setup.py test检查是否有安装成功，如果最后提示
+----------------------------------------------------------------------
+Ran 193 tests in 0.327sOK那么就是安装成功了，此时再导入对应的pb2.py文件即可使用。
+四、导入使用的简单例子
+给出一个简单的调试例子：
+import people_pb2
+pbFirstPeople = people_pb2.people()
+pbFirstPeople.name = joey
+pbFirstPeople.height = 160
+print pbFirstPeople
+输出结果为：name: joey

@@ -1,0 +1,12 @@
+
+def str_len(str):  
+    """
+        计算字符串的长度，包含中文，一个中文占两个字节
+    """
+    try:  
+        row_l=len(str)  
+        utf8_l=len(str.encode('utf-8'))  
+        return (utf8_l-row_l)/2+row_l  
+    except:  
+        return 0  
+    return 0  

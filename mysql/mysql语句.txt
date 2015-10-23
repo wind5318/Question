@@ -1,0 +1,35 @@
+1.两个表关联，修改表字段值等于与另一表字段相加
+  UPDATE goodsinfo as g inner join orderdetails as o ON g.GoodsId=o.GoodsId  
+    
+         SET  g.Sales= (g.Sales + o.Total
+)    
+         where o.OrderNumber ='1411251200413822'
+
+2.查询用户表中，用户名相同就显示1，邮箱相同显示2，其他就显示0，会比较表中所有的数据
+  select case when UserName=@UserName then 1 when Email=@Email then 2 else 0 end from users
+  
+  //例子
+  select uid, (case when UserName='wind' then 1 when Email='bird@163.com' then 2 else 0 end) b from users
+
+
+select orderid,group_concat(concat(b.GoodsName,b.OrderNumber) order by detailid separator ',') as name 
+from orderform a inner join orderdetails b on a.ordernumber = b.ordernumber;
+
+
+
+
+
+select of.OrderNumber,us.UserName as buyer,of.UserName,Status,of.CreateDate,
+ CONVERT((of.Price/100.0),DECIMAL(10,2)),PlanPrice,FactPrice,LogisticsCompany,LogisticsBrand,LogisticsNo,CONVERT((Postage/100.0),DECIMAL(10,2)),Remarks, 
+ group_concat(CONCAT_WS(',',od.GoodsName,CONVERT((od.Price/100.0),DECIMAL(10,2)),od.Total) from  order by od.DetailId separator '#') as orderGoodsName  
+ from OrderForm of INNER JOIN OrderDetails od ON of.OrderNumber=od.OrderNumber INNER JOIN users us ON of.Uid=us.Uid 
+
+
+3.字段截取
+  update dm_mobile set AreaName=substring_index(MobileArea,"_",1)
+
+
+4.字段替换
+  update table1 set '字段1'=replace('字段1','查找值','替换值');
+  
+  如: update table1 set url=replace(url,'http://cos.myqcloud.com/1002877/nwfs/','http://nwfs-10004401.file.myqcloud.com/'),
